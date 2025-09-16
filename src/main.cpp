@@ -18,6 +18,8 @@ const int motor2_rev = 8;
 const int motor3_fwd = 9; //motor 1 left fwd, 2 right fwd, 3 up/dn
 const int motor3_rev = 10;
 
+const int enable_motors_pin = 11; //switch to enable motors/change state CHANGE LATER
+
 // int joy_x, joy_y, joy_up;
 int motor1_pwr, motor2_pwr, motor3_pwr;
 
@@ -66,13 +68,17 @@ void loop(){
 
 void off(){
     Serial.println("powered off");
+    delay(1000);
+    if (digitalRead(enable_motors_pin) == HIGH){
+        state = MAIN;
+    }
 }
 
 void run(){
     //read joysticks
     int R_stick_x = analogRead(R_stick_x_pin);
     int R_stick_y = analogRead(R_stick_y_pin);
-    int L_stick_x = analogRead(L_stick_x_pin); //maybe just make this 0 if not used?
+    int L_stick_x = 0; //maybe just make this 0 if not used?
     int L_stick_y = analogRead(L_stick_y_pin);
 
     //calculate the power that should go to motors based on stick pos
@@ -102,6 +108,9 @@ void run(){
         analogWrite(motor3_rev, abs(motor3_pwr));
     }
 
+    if (digitalRead(enable_motors_pin) == LOW){
+        state = MOTORS_OFF;
+    }
 }
 
 int motor1_thrust(int joy_x, int joy_y){
