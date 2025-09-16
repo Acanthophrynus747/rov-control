@@ -2,23 +2,21 @@
 TODO: research alternative motor drivers (currently HW-039). something easier to reverse? check parts supply
 https://www.handsontec.com/dataspecs/module/BTS7960%20Motor%20Driver.pdf
 */
-
-
 #include <Arduino.h>
 
-const int L_stick_x_pin = 1; //CHANGE THESE LATER
-const int L_stick_y_pin = 2;
-const int R_stick_x_pin = 3;
-const int R_stick_y_pin = 4;
+const int L_stick_x_pin = 34; //maybe CHANGE THESE LATER
+const int L_stick_y_pin = 35;
+const int R_stick_x_pin = 32;
+const int R_stick_y_pin = 33;
 
-const int motor1_fwd = 5; //CHANGE LATER TOO
-const int motor1_rev = 6;
-const int motor2_fwd = 7; //MOTOR CONTROLLERS
-const int motor2_rev = 8;
-const int motor3_fwd = 9; //motor 1 left fwd, 2 right fwd, 3 up/dn
-const int motor3_rev = 10;
+const int motor1_fwd = 5; //maybe CHANGE LATER TOO
+const int motor1_rev = 18;
+const int motor2_fwd = 19; //MOTOR CONTROLLERS
+const int motor2_rev = 21;
+const int motor3_fwd = 22; //motor 1 left fwd, 2 right fwd, 3 up/dn
+const int motor3_rev = 23;
 
-const int enable_motors_pin = 11; //switch to enable motors/change state CHANGE LATER
+const int enable_motors_pin = 25; //switch to enable motors/change state
 
 // int joy_x, joy_y, joy_up;
 int motor1_pwr, motor2_pwr, motor3_pwr;
