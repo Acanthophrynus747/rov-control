@@ -3,6 +3,7 @@ TODO: research alternative motor drivers (currently HW-039). something easier to
 https://www.handsontec.com/dataspecs/module/BTS7960%20Motor%20Driver.pdf
 */
 #include <Arduino.h>
+#include <HardwareSerial.h>
 
 const int L_stick_x_pin = 34; //maybe CHANGE THESE LATER
 const int L_stick_y_pin = 35;
@@ -22,6 +23,7 @@ const int enable_motors_pin = 25; //switch to enable motors/change state
 int motor1_pwr, motor2_pwr, motor3_pwr;
 bool lights_on = true;
 
+// function prototypes
 int motor1_thrust(int joy_x, int joy_y);
 int motor2_thrust(int joy_x, int joy_y);
 int motor3_thrust(int joy_x, int joy_y);
@@ -39,20 +41,18 @@ enum State {
 
 State state;
 
+HardwareSerial TetherSerial(2); //possibly change number later
+
 void setup(){
     Serial.begin(115200);
+    TetherSerial.begin(1000); //change baud rate later as needed
 
     pinMode(L_stick_x_pin, INPUT);
     pinMode(L_stick_y_pin, INPUT);
     pinMode(R_stick_x_pin, INPUT);
     pinMode(R_stick_y_pin, INPUT);
 
-    // pinMode(motor1_fwd, OUTPUT);
-    // pinMode(motor1_rev, OUTPUT);
-    // pinMode(motor2_fwd, OUTPUT);
-    // pinMode(motor2_rev, OUTPUT);
-    // pinMode(motor3_fwd, OUTPUT);
-    // pinMode(motor3_rev, OUTPUT);
+    //TODO: input for lights, maybe input for camera stuff
 }
 
 void loop(){
@@ -90,7 +90,8 @@ void run(){
 
     String control_msg = controlMsg(motor1_pwr, motor2_pwr, motor3_pwr, lights_on);
 
-    
+    // send control message
+    TetherSerial.print(control_msg);
 }
 
 int motor1_thrust(int joy_x, int joy_y){
@@ -122,6 +123,6 @@ int motor3_thrust(int joy_x, int joy_y){
 }
 
 String controlMsg(int motor1_pwr, int motor2_pwr, int motor3_pwr, bool lights_on){
-    String control_str = "A" + String(motor1_pwr) + "B" + String(motor2_pwr) + "C" + String(motor3_pwr) + "D" + String(lights_on);
+    String control_str = "ZA" + String(motor1_pwr) + "B" + String(motor2_pwr) + "C" + String(motor3_pwr) + "D" + String(lights_on) + "X";
     return control_str;
 }
