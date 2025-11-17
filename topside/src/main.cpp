@@ -17,7 +17,7 @@ const int R_stick_y_pin = 33;
 // const int motor3_fwd = 22; //motor 1 left fwd, 2 right fwd, 3 up/dn
 // const int motor3_rev = 23;
 
-const int enable_motors_pin = 25; //switch to enable motors/change state
+const int motors_enable = 25; //switch to enable motors/change state
 
 // variables for control inputs to send to ROV
 int motor1_pwr, motor2_pwr, motor3_pwr;
@@ -71,7 +71,16 @@ void loop(){
 void off(){
     Serial.println("powered off");
     delay(1000);
-    if (digitalRead(enable_motors_pin) == HIGH){
+
+    motor1_pwr = 0; //dont take inputs, just set all to zero
+    motor2_pwr = 0;
+    motor3_pwr = 0;
+
+    String control_msg = controlMsg(motor1_pwr, motor2_pwr, motor3_pwr, lights_on);
+
+    TetherSerial.print(control_msg);
+
+    if (digitalRead(motors_enable) == HIGH){
         state = MAIN;
     }
 }
@@ -123,6 +132,9 @@ int motor3_thrust(int joy_x, int joy_y){
 }
 
 String controlMsg(int motor1_pwr, int motor2_pwr, int motor3_pwr, bool lights_on){
-    String control_str = "ZA" + String(motor1_pwr) + "B" + String(motor2_pwr) + "C" + String(motor3_pwr) + "D" + String(lights_on) + "X";
+    String control_str = "<A" + String(motor1_pwr) + "B" + String(motor2_pwr) + "C" + String(motor3_pwr) + "D" + String(lights_on) + ">";
     return control_str;
+    // probably add a motor enable control
 }
+
+//TODO: add telemetry. receive signal from ROV

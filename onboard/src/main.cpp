@@ -67,12 +67,19 @@ void off(){
 
 void run(){
     String command = "";
-    char input = TetherSerial.read();
+    char input;
+
+    if (TetherSerial.available()){
+        char input = TetherSerial.read();
+    }
+
     if (input == 'Z'){
         // start of new control message,
         input = TetherSerial.read();
         while (input != 'X'){
-            command += input;
+            if (TetherSerial.available()){
+                command += input; //check the logic here, there might be problems
+            }
         }
     }
     Serial.println(command); //for debugging
