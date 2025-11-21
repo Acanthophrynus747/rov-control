@@ -73,10 +73,10 @@ void run(){
         char input = TetherSerial.read();
     }
 
-    if (input == 'Z'){
+    if (input == '<'){
         // start of new control message,
         input = TetherSerial.read();
-        while (input != 'X'){
+        while (input != '>'){
             if (TetherSerial.available()){
                 command += input; //check the logic here, there might be problems
             }
